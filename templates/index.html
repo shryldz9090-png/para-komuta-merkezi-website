@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Komuta Merkezi - Merkezi Portal</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+        }
+
+        .logo-text {
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3)); }
+            to { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)); }
+        }
+
+        .app-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .app-card:hover::before {
+            left: 100%;
+        }
+
+        .app-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .status-online {
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .feature-badge {
+            transition: all 0.2s;
+        }
+
+        .feature-badge:hover {
+            transform: scale(1.05);
+        }
+
+        .hero-title {
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Header -->
+    <header class="bg-gray-900 bg-opacity-80 backdrop-blur-lg shadow-2xl border-b border-gray-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-coins text-5xl text-yellow-500 animate-spin" style="animation-duration: 3s;"></i>
+                    <div>
+                        <h1 class="text-4xl font-black logo-text">PARA KOMUTA MERKEZİ</h1>
+                        <p class="text-sm text-gray-400 mt-1">Yatırım Yönetim Sistemi v2.0</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="text-right">
+                        <p class="text-xs text-gray-400">Sistem Durumu</p>
+                        <div class="flex items-center space-x-2 mt-1">
+                            <div class="w-2 h-2 bg-green-500 rounded-full status-online"></div>
+                            <span class="text-green-400 font-semibold text-sm">Tüm Sistemler Aktif</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="text-center mb-12">
+            <h2 class="text-5xl font-black text-white hero-title mb-4">
+                Yatırımlarınızı Tek Merkezden Yönetin
+            </h2>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                6 güçlü uygulama ile portföy yönetimi, analiz ve strateji geliştirme araçlarına anında erişin
+            </p>
+        </div>
+
+        <!-- Applications Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for app in applications %}
+            <div class="app-card bg-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-gray-700">
+                <!-- Card Header -->
+                <div class="bg-gradient-to-r from-{{ app.color }}-600 to-{{ app.color }}-800 p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="bg-white bg-opacity-20 p-4 rounded-xl backdrop-blur">
+                                <i class="fas {{ app.icon }} text-4xl text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-white">{{ app.name }}</h3>
+                                <p class="text-sm text-gray-200 mt-1">Port: {{ app.port }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Body -->
+                <div class="p-6">
+                    <p class="text-gray-300 mb-6 min-h-[60px]">{{ app.description }}</p>
+
+                    <!-- Features -->
+                    <div class="space-y-2 mb-6">
+                        {% for feature in app.features %}
+                        <div class="feature-badge flex items-center space-x-2 text-sm text-gray-400">
+                            <i class="fas fa-check-circle text-{{ app.color }}-500"></i>
+                            <span>{{ feature }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Status & Action -->
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                        <div class="flex items-center space-x-2">
+                            {% if app.status %}
+                            <div class="w-3 h-3 bg-green-500 rounded-full status-online"></div>
+                            <span class="text-green-400 text-sm font-semibold">Çalışıyor</span>
+                            {% else %}
+                            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                            <span class="text-red-400 text-sm font-semibold">Kapalı</span>
+                            {% endif %}
+                        </div>
+
+                        <a href="{{ app.url }}" target="_blank"
+                           class="px-6 py-3 bg-{{ app.color }}-600 hover:bg-{{ app.color }}-500 text-white font-bold rounded-lg transition-all transform hover:scale-105 flex items-center space-x-2">
+                            <span>Aç</span>
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Info Section -->
+        <div class="mt-16 bg-gray-800 bg-opacity-50 backdrop-blur rounded-2xl p-8 border border-gray-700">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div>
+                    <div class="text-4xl font-black text-yellow-500 mb-2">6</div>
+                    <p class="text-gray-300">Güçlü Uygulama</p>
+                </div>
+                <div>
+                    <div class="text-4xl font-black text-green-500 mb-2">24/7</div>
+                    <p class="text-gray-300">Kesintisiz Erişim</p>
+                </div>
+                <div>
+                    <div class="text-4xl font-black text-blue-500 mb-2">∞</div>
+                    <p class="text-gray-300">Sınırsız Analiz</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 bg-opacity-80 backdrop-blur-lg border-t border-gray-700 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center text-gray-400">
+                <p class="mb-2">© 2025 Para Komuta Merkezi - Tüm Hakları Saklıdır</p>
+                <p class="text-sm">Profesyonel Yatırım Yönetim Ekosistemi</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sayfa yüklendiğinde uygulama durumlarını kontrol et
+        setInterval(function() {
+            fetch('/status')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Uygulama durumları güncellendi:', data);
+                })
+                .catch(error => console.error('Durum kontrolü başarısız:', error));
+        }, 30000); // Her 30 saniyede bir kontrol et
+    </script>
+</body>
+</html>
